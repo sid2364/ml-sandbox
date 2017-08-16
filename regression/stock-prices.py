@@ -26,14 +26,14 @@ df = df[['Adj. Close', 'HL_PCT', 'PCT_change', 'Adj. Volume']]
 label = 'Future Price'
 forecast_col = 'Adj. Close'
 df.fillna(-99999, inplace=True)
-forecast_out = int(math.ceil(0.01*len(df)))
+forecast_out = int(math.ceil(0.05*len(df)))
 print("Taking labels as closing price for " + str(forecast_out) + " days in the future.")
 df[label] = df[forecast_col].shift(-forecast_out)
 
 X = np.array(df.drop([label], 1)) # returns new df
 X = preprocessing.scale(X)
-X = X[:-forecast_out]
 X_lately = X[-forecast_out:]
+X = X[:-forecast_out]
 
 df.dropna(inplace=True)
 # no need to take care of the shifting since we dropped na

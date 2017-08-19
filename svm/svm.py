@@ -6,7 +6,7 @@ style.use("ggplot")
 
 
 class SVM:
-	def __init__(self, visualization=True):
+	def __init__(self, visualization=True, linearly_seperable=True):
 		self.visualization = visualization
 		self.colors = {1: 'r', -1: 'b'}
 		if self.visualization:
@@ -20,32 +20,26 @@ class SVM:
 		transforms = [[1,1],[-1,1],[-1,-1],[1,-1]]
 
 		data_ = []
-		print(self.data)
 		for yi in self.data:
 			for featureset in self.data[yi]:
 				for feature in featureset:
 					data_.append(feature)
 
-		print(data_)
 		self.max_feature_value = max(data_)
 		self.min_feature_value = min(data_)
-		print(self.max_feature_value, self.min_feature_value)
 		data_ = None
 
 		step_sizes = [self.max_feature_value * 0.1,
 				self.max_feature_value * 0.01,
 				self.max_feature_value * 0.001]
-		print(step_sizes)
 
 		b_range_multiple = 5
 		b_multiple = 5 # no need to take small steps like with 'w'
 
 		latest_optima = self.max_feature_value * 10
-		print(latest_optima)
 
 		for step in step_sizes:
 			w = np.array([latest_optima, latest_optima])
-			print(w)
 			optimized = False
 
 			########################### CAN BE THREADED ############################ 
@@ -67,17 +61,25 @@ class SVM:
 					optimized = True
 				else:
 					w = w - step
+
+			if not opt_dict:
+				print("Data not linearly seperable. Cannot proceed with current implementation without Kernels.")
+				self.linearly_seperable = False
+				return
+
 			norms = sorted([n for n in opt_dict])
 			opt_choice = opt_dict[norms[0]]
 
 			self.w = opt_choice[0]
 			self.b = opt_choice[1]
 
-			print("'w' and 'b' values: ", self.w, self.b, " with step size of ", step)
 
 			latest_optima = opt_choice[0][0] + step * 2
 
 	def predict(self, features):
+		if not self.linearly_seperable:
+			print("Cannot predict without a decision boundary.")
+			return
 		# sign of dot product of x and w + b
 		classification = np.sign(np.dot
 			(np.array(features), self.w) + self.b)
@@ -86,6 +88,9 @@ class SVM:
 		return classification
 
 	def visualize(self):
+		if not self.linearly_seperable:
+			print("Data provided for fitting was not linearly seperable. No decision boundary determined.")
+			return
 		[[self.ax.scatter(x[0], x[1], s=100, color=self.colors[i]) for x in data_dict[i]] for i in data_dict]
 		def hyperplane(x, w, b, v):
 			# hyperplane = x.w + b = v
@@ -113,7 +118,7 @@ class SVM:
 data_dict = {-1: np.array([[1, 7],
 				[2, 8],
 				[3, 8],]),
-		1: np.array([[5, 1],
+		1: np.array([[2, 7],
 				[6, -1],
 				[7, 3],])}
 
@@ -123,7 +128,7 @@ test_data = [[0,10], [3,1], [-4, 5], [6, -5], [5,8], [1,4], [4,5], [6,7]]
 svm = SVM()
 svm.fit(data_dict)
 
-for d in test_data:
-	svm.predict(d)
+#for d in test_data:
+#	svm.predict(d)
 
 svm.visualize()

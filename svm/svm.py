@@ -1,13 +1,17 @@
 import matplotlib.pyplot as plt
 from matplotlib import style
 import numpy as np
+from warnings import warn
 
-style.use("ggplot")
+style.use("fivethirtyeight")
 
 
 class SVM:
 	def __init__(self, visualization=True, linearly_seperable=True):
+		self.linearly_seperable=linearly_seperable
 		self.visualization = visualization
+		self.w = None
+		self.b = None
 		self.colors = {1: 'r', -1: 'b'}
 		if self.visualization:
 			self.fig = plt.figure()
@@ -63,7 +67,7 @@ class SVM:
 					w = w - step
 
 			if not opt_dict:
-				print("Data not linearly seperable. Cannot proceed with current implementation without Kernels.")
+				warn("Data not linearly seperable. Cannot proceed with current implementation without Kernels.")
 				self.linearly_seperable = False
 				return
 
@@ -78,7 +82,10 @@ class SVM:
 
 	def predict(self, features):
 		if not self.linearly_seperable:
-			print("Cannot predict without a decision boundary.")
+			warn("Cannot predict without a decision boundary.")
+			return
+		if self.w is None or self.b is None:
+			warn("Must call fit before predicting.")
 			return
 		# sign of dot product of x and w + b
 		classification = np.sign(np.dot
@@ -89,7 +96,7 @@ class SVM:
 
 	def visualize(self):
 		if not self.linearly_seperable:
-			print("Data provided for fitting was not linearly seperable. No decision boundary determined.")
+			warn("Data provided for fitting was not linearly seperable. No decision boundary determined.")
 			return
 		[[self.ax.scatter(x[0], x[1], s=100, color=self.colors[i]) for x in data_dict[i]] for i in data_dict]
 		def hyperplane(x, w, b, v):
@@ -128,7 +135,7 @@ test_data = [[0,10], [3,1], [-4, 5], [6, -5], [5,8], [1,4], [4,5], [6,7]]
 svm = SVM()
 svm.fit(data_dict)
 
-#for d in test_data:
-#	svm.predict(d)
+for d in test_data:
+	svm.predict(d)
 
 svm.visualize()

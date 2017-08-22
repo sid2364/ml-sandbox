@@ -4,13 +4,16 @@ Data from: https://pythonprogramming.net/static/downloads/machine-learning-data/
 import matplotlib.pyplot as plt
 from matplotlib import style
 import numpy as np
-from sklearn.cluster import KMeans
+#from sklearn.cluster import KMeans
 import pandas as pd
 from sklearn import preprocessing
+import kmeans
 
 style.use("ggplot")
 
 df = pd.read_excel('titanic.xls')
+import sklearn.utils
+df = sklearn.utils.shuffle(df)
 
 df.drop(['body', 'name'], 1, inplace=True)
 df.convert_objects(convert_numeric=True)
@@ -37,22 +40,23 @@ def handle_non_numerical_data(df):
 
 df = handle_non_numerical_data(df)
 
-X = np.array(df.drop(['survived', 'ticket'], 1).astype(float))
+X = np.array(df.drop(['survived'], 1).astype(float))
 X = preprocessing.scale(X)
 y = np.array(df['survived'])
 
-classifier = KMeans(n_clusters=2)
+#classifier = KMeans(n_clusters=2)
+classifier = kmeans.KMeans()
 classifier.fit(X)
 
-labels = classifier.labels_
+#labels = classifier.labels_
 
 correct = 0
 for i in range(len(X)):
 	predict = np.array(X[i].astype(float))
 	predict = predict.reshape(-1, len(predict))
 	prediction = classifier.predict(predict)
-	if prediction[0] == y[i]:
+	if prediction == y[i]:
 		correct += 1
 
-print(1.0*correct/len(X))
+print("Accuracy: ", 1.0*correct/len(X))
 

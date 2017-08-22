@@ -44,33 +44,34 @@ class KMeans:
 				break
 
 	def predict(self, data):
-		distances = [np.linalg.norm(featureset - self.centroids[centroid]) for centroid in self.centroids]
+		distances = [np.linalg.norm(data - self.centroids[centroid]) for centroid in self.centroids]
 		classification = distances.index(min(distances))
 		return classification
 
 
 
 # # # # #
+if __name__ == "__main__":
 
-colors = ['r', 'b']
+	colors = ['r', 'b']
 
-classifier = KMeans()
-classifier.fit(data)
+	classifier = KMeans()
+	classifier.fit(data)
 
-for centroid in classifier.centroids:
-	plt.scatter(classifier.centroids[centroid][0], classifier.centroids[centroid][1], marker="o", color="k", s=100)
+	for centroid in classifier.centroids:
+		plt.scatter(classifier.centroids[centroid][0], classifier.centroids[centroid][1], marker="o", color="k", s=100)
 
-for classification in classifier.classifications:
-	c = colors[classification]
-	for featureset in classifier.classifications[classification]:
-		plt.scatter(featureset[0], featureset[1], marker='x', color=c, s=120)
+	for classification in classifier.classifications:
+		c = colors[classification]
+		for featureset in classifier.classifications[classification]:
+			plt.scatter(featureset[0], featureset[1], marker='x', color=c, s=120)
 
-#plt.show()
+	#plt.show()
 
-unknown_data = np.array([[1, 4], [7, 6], [4, 1], [3, 4], [9, 12]])
+	unknown_data = np.array([[1, 4], [7, 6], [4, 1], [3, 4], [9, 12]])
 
-for unknown in unknown_data:
-	classification = classifier.predict(unknown)
-	plt.scatter(unknown[0], unknown[1], marker='*', color=colors[classification], s=130)
+	for unknown in unknown_data:
+		classification = classifier.predict(unknown)
+		plt.scatter(unknown[0], unknown[1], marker='*', color=colors[classification], s=130)
 
-plt.show()
+	plt.show()

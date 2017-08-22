@@ -6,7 +6,7 @@ from matplotlib import style
 import numpy as np
 from sklearn.cluster import KMeans
 import pandas as pd
-from sklearn import preprocessing, cross_validation
+from sklearn import preprocessing
 
 style.use("ggplot")
 
@@ -36,4 +36,23 @@ def handle_non_numerical_data(df):
 	return df
 
 df = handle_non_numerical_data(df)
-print(df.head())
+
+X = np.array(df.drop(['survived', 'ticket'], 1).astype(float))
+X = preprocessing.scale(X)
+y = np.array(df['survived'])
+
+classifier = KMeans(n_clusters=2)
+classifier.fit(X)
+
+labels = classifier.labels_
+
+correct = 0
+for i in range(len(X)):
+	predict = np.array(X[i].astype(float))
+	predict = predict.reshape(-1, len(predict))
+	prediction = classifier.predict(predict)
+	if prediction[0] == y[i]:
+		correct += 1
+
+print(1.0*correct/len(X))
+

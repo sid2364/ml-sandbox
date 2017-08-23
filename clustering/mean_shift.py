@@ -3,7 +3,7 @@ from matplotlib import style
 from sklearn.datasets.samples_generator import make_blobs
 
 
-X, y = make_blobs(n_samples=25, centers=5, n_features=2)
+X, y = make_blobs(n_samples=25, centers=3, n_features=2)
 
 style.use("ggplot")
 

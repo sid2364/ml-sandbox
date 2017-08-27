@@ -9,7 +9,7 @@ n_nodes_hidden_layer2 = 600
 n_nodes_hidden_layer3 = 500
 
 n_classes = 10 # ten digits
-batch_size = 300 # run 100 samples and then tweak weights
+batch_size = 100 # run 100 samples and then tweak weights
 
 # height * width
 x = tf.placeholder("float", [None, 784]) # 784 is 28x28, since each handwritten digit is 28x28 pixels

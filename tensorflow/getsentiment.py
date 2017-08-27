@@ -30,7 +30,6 @@ def create_lexicon(positive, negative):
 		if 10 < w_counts[w] < 500: # more occurances than 50 and less than 1000
 			l2.append(w)
 
-	print(l2)
 	return l2
 
 def sample_handling(sample, lexicon, classification):
@@ -51,7 +50,6 @@ def sample_handling(sample, lexicon, classification):
 			features = list(features)
 			featureset.append([features, classification])
 	#print(featureset)
-	print("Reached end of sample_handling()")
 	return featureset
 
 def create_feature_sets_and_labels(positive_text, negative_text, test_size=0.1):
@@ -63,7 +61,7 @@ def create_feature_sets_and_labels(positive_text, negative_text, test_size=0.1):
 
 	features = np.array(features)
 	testing_size = int(test_size*len(features))
-	print("Got testing_size")
+
 	train_X = list(features[:,0][:-testing_size])
 	train_y = list(features[:,1][:-testing_size])
 

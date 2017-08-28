@@ -1,3 +1,6 @@
+'''
+Data pos.txt and neg.txt from https://pythonprogramming.net/
+'''
 import nltk
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer

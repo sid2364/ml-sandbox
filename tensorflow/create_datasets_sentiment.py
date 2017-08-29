@@ -30,7 +30,7 @@ def create_lexicon(positive, negative):
 	
 	l2 = []
 	for w in w_counts:
-		if 10 < w_counts[w] < 500: # more occurances than 50 and less than 1000
+		if 10 < w_counts[w] < 1000: # more occurances than 50 and less than 1000
 			l2.append(w)
 
 	return l2

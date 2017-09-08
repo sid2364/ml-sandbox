@@ -29,6 +29,7 @@ convNet = regression(convNet, optimizer="adam", learning_rate=0.01, loss="catego
 
 model = tflearn.DNN(convNet)
 
+"""
 model.fit(X, y,
 	n_epoch=4,
 	validation_set=(test_X, test_y),
@@ -38,3 +39,7 @@ model.fit(X, y,
 	)
 
 model.save('tflearnconvnet.model')
+"""
+model.load('tflearnconvnet.model')
+
+print(model.predict([test_X[1]]))
